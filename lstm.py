@@ -11,20 +11,44 @@ import random
 import sys
 import io
 import random
+import argparse
 
 
 
 """
     modes:
-    [0]'init'      :: train without loading in weights, and write to weights
-    [1]'train'     :: load weights from weights, train, and then wright back to weights
-    [2]'sample'    :: don't train and instead print a sample
+    'init'      :: train without loading in weights, and write to weights
+    'train'     :: load weights from weights, train, and then wright back to weights
+    'sample'    :: don't train and instead print a sample
 """
 
-modes = ('init', 'train', 'sample')
-mode = modes[2]
+parser = argparse.ArgumentParser(description="An LSTM")
+parser.add_argument('mode', choices=['init', 'train', 'sample'], default='sample',
+                    help= "Indicate whether program should be in 'int', 'train', or 'sample' mode")
+                    #dest is mode ??
+parser.add_argument('--sample', type=int, default=1000,
+                     help="The number of characters to be generated when sampling. Default = 1000")
+                    #maybe also allow temperature of samples to be chosen
+                    #only if sample mode?
+parser.add_argument('--epoch', type=int, default=3,
+                    help='Indicate the number of epochs that the model should be trained on. Default = 3')
+                    #only if not sample mode ??
+parser.add_argument('--step', type=int, default=5,
+                    help='The step size for creating sentences from corpus. Default = 5')
+parser.add_argument('--sampleSize', type=int, default=1000000,
+                    help="The maximum number of characters from the corpus to be trained on. Default is one million")
+#parser.add_argument('--corpus', type=argparse.FileType('r'), default='Lyrics.txt',
+#                   help="Indicate the corpus source file if not 'Lyrics.txt'")
+parser.add_argument('--corpus', type=str, default='Lyrics.txt',
+                    help="Indicate the corpus source file if not 'Lyrics.txt'")
+args = parser.parse_args()
 
-corpus = 'Lyrics.txt'
+mode = args.mode
+printSize = args.sample
+numEpoch = args.epoch
+step = args.step
+sampleSize = args.sampleSize
+corpus = args.corpus
 weights = 'weights.hdf5'
 
 #########################
@@ -44,17 +68,11 @@ data_size, vocab_size = len(text), len(chars)
 
 # cut the text in semi-redundant sequences of maxlen characters
 maxlen = 40
-step = 3
 sentences = []
 next_chars = []
 
-sampleSize = 1000000
-textStart  = 0
+textStart = 0
 textEnd = 0
-numEpoch = 3
-printSize = 1000
-
-
 if len(text) > sampleSize:
     textEnd = random.randint(sampleSize - 1, len(text) - 1)
     textStart = textEnd - sampleSize
