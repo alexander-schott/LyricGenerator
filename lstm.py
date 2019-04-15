@@ -7,7 +7,6 @@ from keras.layers import Dense
 from keras.layers import LSTM
 from keras.optimizers import RMSprop
 import numpy as np
-import random
 import sys
 import io
 import random
@@ -35,7 +34,7 @@ parser.add_argument('--epoch', type=int, default=3,
                     #only if not sample mode ??
 parser.add_argument('--step', type=int, default=5,
                     help='The step size for creating sentences from corpus. Default = 5')
-parser.add_argument('--sampleSize', type=int, default=1000000,
+parser.add_argument('--sampleSize', type=int, default=(-1),
                     help="The maximum number of characters from the corpus to be trained on. Default is one million")
 #parser.add_argument('--corpus', type=argparse.FileType('r'), default='Lyrics.txt',
 #                   help="Indicate the corpus source file if not 'Lyrics.txt'")
@@ -73,7 +72,7 @@ next_chars = []
 
 textStart = 0
 textEnd = 0
-if len(text) > sampleSize:
+if len(text) > sampleSize and sampleSize > 0:
     textEnd = random.randint(sampleSize - 1, len(text) - 1)
     textStart = textEnd - sampleSize
     for i in range(textStart, textEnd - maxlen, step):
