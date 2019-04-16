@@ -1,4 +1,3 @@
-
 from __future__ import print_function
 from keras.callbacks import LambdaCallback
 from keras.callbacks import ModelCheckpoint
@@ -166,10 +165,8 @@ def on_epoch_end(epoch, _):
         print()
         file.write(generated + '\n')
 
-
-checkpoint = [ModelCheckpoint(filepath=weights)]
+checkpoint = [ModelCheckpoint(filepath=weights, save_best_only=True)]
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
-
 callback = checkpoint
 if mode == 'sample':
     callback = print_callback
@@ -180,7 +177,7 @@ if mode != 'sample':
     model.fit(x, y,
               batch_size=128,
               epochs=numEpoch,
-              callbacks=callback
+              callbacks=checkpoint
               )
 else:
     #sample
