@@ -107,7 +107,7 @@ model.add(Dense(len(chars), activation='softmax'))
 
 # load weights
 if mode != 'init':
-    model.load_weights("weights.hdf5")
+    model.load_weights(weights)
 
 optimizer = RMSprop(lr=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer)
@@ -165,7 +165,7 @@ def on_epoch_end(epoch, _):
         print()
         file.write(generated + '\n')
 
-checkpoint = [ModelCheckpoint(filepath=weights, save_best_only=True, monitor="val_loss")]
+checkpoint = [ModelCheckpoint(filepath=weights)]
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 callback = checkpoint
 if mode == 'sample':
