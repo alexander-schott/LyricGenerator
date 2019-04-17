@@ -165,7 +165,7 @@ def on_epoch_end(epoch, _):
         print()
         file.write(generated + '\n')
 
-checkpoint = [ModelCheckpoint(filepath=weights, save_best_only=True)]
+checkpoint = [ModelCheckpoint(filepath=weights, save_best_only=True, monitor="val_loss")]
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 callback = checkpoint
 if mode == 'sample':
