@@ -71,6 +71,8 @@ next_chars = []
 
 textStart = 0
 textEnd = 0
+
+# if sampleSize is smaller than the size of the corpus, use a smaller section of the corpus randomly chosen.
 if len(text) > sampleSize and sampleSize > 0:
     textEnd = random.randint(sampleSize - 1, len(text) - 1)
     textStart = textEnd - sampleSize
@@ -79,6 +81,7 @@ if len(text) > sampleSize and sampleSize > 0:
         next_chars.append(text[i + maxlen])
     print('nb sequences:', len(sentences))
 else:
+    # Using the entire corpus
     for i in range(0, len(text) - maxlen, step):
         sentences.append(text[i: i + maxlen])
         next_chars.append(text[i + maxlen])
@@ -129,13 +132,9 @@ def sample(preds, temperature=1.0):
     return np.argmax(probas)
 
 
-def on_epoch_end(epoch, _):
+def writeSample():
     file = open('out.txt', 'a')
     file.write('\n \n \n')
-
-    # Function invoked at end of each epoch. Prints generated text.
-    print()
-    print('----- Generating text after Epoch: %d' % epoch)
 
     start_index = random.randint(0, len(text) - maxlen - 1)
     for diversity in [0.5, 1.0]:
@@ -164,13 +163,9 @@ def on_epoch_end(epoch, _):
             sys.stdout.flush()
         print()
         file.write(generated + '\n')
-#checkpoint = [ModelCheckpoint(filepath=weights)]
+
+# checkpoint used for init and train to save weights after each epoch
 checkpoint = [ModelCheckpoint(filepath=weights, save_best_only=True)]
-print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
-callback = checkpoint
-if mode == 'sample':
-    callback = print_callback
-    numEpoch = 1
 
 if mode != 'sample':
     #train
@@ -181,4 +176,4 @@ if mode != 'sample':
               )
 else:
     #sample
-    on_epoch_end(0, 5)
+    writeSample()
