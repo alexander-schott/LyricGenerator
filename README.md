@@ -21,3 +21,6 @@ lstm.py  -The lstm used to generate Lyrics for the project.
 Lyrics.txt  -The dataset of song lyrics used to train the lstm.
 
 LyricProcessing.py  -The tools for annotating lyrics with phonemes, and sentiment. Contains the naive bayes nets used to classify sentiment.
+
+[EmoBank:](https://github.com/JULIELab/EmoBank)
+Sven Buechel and Udo Hahn. 2017. EmoBank: Studying the Impact of Annotation Perspective and Representation Format on Dimensional Emotion Analysis. In EACL 2017 - Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics. Valencia, Spain, April 3-7, 2017. Volume 2, Short Papers, pages 578-585. Available: http://aclweb.org/anthology/E17-2092
