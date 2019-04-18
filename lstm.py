@@ -138,7 +138,7 @@ def on_epoch_end(epoch, _):
     print('----- Generating text after Epoch: %d' % epoch)
 
     start_index = random.randint(0, len(text) - maxlen - 1)
-    for diversity in [0.2, 0.5, 1.0, 1.2]:
+    for diversity in [0.5, 1.0]:
         print('----- diversity:', diversity)
 
         generated = ''
@@ -164,8 +164,8 @@ def on_epoch_end(epoch, _):
             sys.stdout.flush()
         print()
         file.write(generated + '\n')
-
-checkpoint = [ModelCheckpoint(filepath=weights)]
+#checkpoint = [ModelCheckpoint(filepath=weights)]
+checkpoint = [ModelCheckpoint(filepath=weights, save_best_only=True)]
 print_callback = LambdaCallback(on_epoch_end=on_epoch_end)
 callback = checkpoint
 if mode == 'sample':
